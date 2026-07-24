@@ -15,13 +15,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { PoemCard } from "@/components/poems/poem-card";
-import {
-  getAllCollections,
-  getAllPoems,
-  getAllPoets,
-  getAllThemes,
-  THEME_LABELS,
-} from "@/lib/poems";
+import { useLanguage } from "@/components/site/language-provider";
+import { getAllCollections, getAllPoems, getAllPoets, getAllThemes } from "@/lib/poems";
 import type { Theme } from "@/types/poem";
 import { cn } from "@/lib/utils";
 
@@ -40,6 +35,8 @@ export function LibraryExplorer({ initial }: { initial?: LibraryInitialFilters }
   const collections = getAllCollections();
   const router = useRouter();
   const pathname = usePathname();
+  const { locale, dict, themeLabels } = useLanguage();
+  const isFa = locale === "fa";
 
   const [query, setQuery] = useState(initial?.q ?? "");
   const [collection, setCollection] = useState<string>(initial?.collection ?? ALL);
@@ -85,7 +82,14 @@ export function LibraryExplorer({ initial }: { initial?: LibraryInitialFilters }
       if (activeThemes.length > 0 && !activeThemes.every((t) => poem.themes.includes(t)))
         return false;
       if (q) {
-        const haystack = `${poem.title} ${poem.translation.join(" ")}`.toLowerCase();
+        const haystack = [
+          poem.title,
+          poem.titleOriginal ?? "",
+          ...poem.translation,
+          ...(poem.originalText ?? []),
+        ]
+          .join(" ")
+          .toLowerCase();
         if (!haystack.includes(q)) return false;
       }
       return true;
@@ -97,17 +101,18 @@ export function LibraryExplorer({ initial }: { initial?: LibraryInitialFilters }
       <div className="border-border/70 bg-card/60 flex flex-col gap-4 rounded-lg border p-5">
         <div className="flex flex-col gap-4 sm:flex-row">
           <Input
-            placeholder="Filter by word or phrase…"
+            placeholder={dict.library.filterPlaceholder}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="sm:max-w-xs"
+            dir={isFa ? "rtl" : undefined}
           />
           <Select value={collection} onValueChange={setCollection}>
             <SelectTrigger className="sm:w-56">
-              <SelectValue placeholder="All collections" />
+              <SelectValue placeholder={dict.library.allCollections} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value={ALL}>All collections</SelectItem>
+              <SelectItem value={ALL}>{dict.library.allCollections}</SelectItem>
               {collections.map((c) => (
                 <SelectItem key={c} value={c}>
                   {c}
@@ -122,7 +127,7 @@ export function LibraryExplorer({ initial }: { initial?: LibraryInitialFilters }
               className="text-muted-foreground gap-1.5"
             >
               <X className="size-4" />
-              Clear
+              {dict.library.clear}
             </Button>
           )}
         </div>
@@ -140,7 +145,7 @@ export function LibraryExplorer({ initial }: { initial?: LibraryInitialFilters }
                   variant={active ? "accent" : "outline"}
                   className={cn("cursor-pointer select-none", active && "shadow-sm")}
                 >
-                  {THEME_LABELS[theme]}
+                  {themeLabels[theme]}
                 </Badge>
               </button>
             );
@@ -149,12 +154,14 @@ export function LibraryExplorer({ initial }: { initial?: LibraryInitialFilters }
       </div>
 
       <p className="text-muted-foreground mt-6 text-sm">
-        {results.length} {results.length === 1 ? "poem" : "poems"} found
+        {results.length === 1
+          ? dict.library.poemsFoundOne
+          : dict.library.poemsFound(results.length)}
       </p>
 
       {results.length === 0 ? (
         <div className="border-border text-muted-foreground mt-8 rounded-lg border border-dashed p-12 text-center">
-          No poems match these filters yet. Try loosening the search.
+          {dict.library.noResults}
         </div>
       ) : (
         <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -163,6 +170,7 @@ export function LibraryExplorer({ initial }: { initial?: LibraryInitialFilters }
               key={poem.slug}
               poem={poem}
               poet={poets.find((p) => p.slug === poem.poetSlug)}
+              locale={locale}
             />
           ))}
         </div>

@@ -4,19 +4,29 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { OrnamentalDivider } from "@/components/site/ornamental-divider";
 import { FeaturedPoem } from "@/components/poems/featured-poem";
-import {
-  getPoemOfDay,
-  getPoetBySlug,
-  THEME_LABELS,
-  getAllThemes,
-  withPoet,
-} from "@/lib/poems";
+import { getDictionary, getThemeLabels } from "@/lib/i18n/dictionary";
+import { getLocale } from "@/lib/i18n/locale";
+import { getPoemOfDay, getPoetBySlug, getAllThemes, withPoet } from "@/lib/poems";
 
-export default function Home() {
+export default async function Home() {
+  const locale = await getLocale();
+  const dict = getDictionary(locale);
+  const themeLabels = getThemeLabels(locale);
+  const isFa = locale === "fa";
+
   const { poem, poet } = withPoet(getPoemOfDay());
   const rumi = getPoetBySlug("rumi");
   const themes = getAllThemes();
-  const [bioExcerpt] = rumi?.bio.split("\n\n") ?? [];
+  const bioSource = isFa ? (rumi?.bioFa ?? rumi?.bio) : rumi?.bio;
+  const [bioExcerpt] = bioSource?.split("\n\n") ?? [];
+
+  const journeyCards = [
+    { href: "/ideas", ...dict.sections.ideas },
+    { href: "/stories", ...dict.sections.stories },
+    { href: "/for-life", ...dict.sections.forLife },
+    { href: "/ask", ...dict.sections.ask },
+    { href: "/resources", ...dict.sections.resources },
+  ];
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
@@ -28,26 +38,23 @@ export default function Home() {
           Golshan Raz
         </h1>
         <p className="text-secondary mt-2 text-sm tracking-[0.3em] uppercase">
-          a rose garden of secrets
+          {dict.home.kicker}
         </p>
         <OrnamentalDivider className="my-8" />
         <p className="text-muted-foreground leading-relaxed text-pretty sm:text-lg">
-          A small, unhurried collection devoted entirely to Jalal ad-Din Rumi — gathered
-          here the way an illuminated manuscript gathers light: slowly, and to be returned
-          to. Read a poem of the day, wander the collection by theme, or let chance choose
-          for you.
+          {dict.home.intro}
         </p>
       </section>
 
       <div className="animate-fade-up mt-14" style={{ animationDelay: "150ms" }}>
-        <FeaturedPoem poem={poem} poet={poet} />
+        <FeaturedPoem poem={poem} poet={poet} locale={locale} />
       </div>
 
       <section className="animate-fade-up mt-20" style={{ animationDelay: "250ms" }}>
         <div className="text-center">
-          <h2 className="font-display text-3xl">Wander by theme</h2>
+          <h2 className="font-display text-3xl">{dict.home.wanderByTheme}</h2>
           <p className="text-muted-foreground mt-2 text-sm">
-            Every poem in the collection is tagged for the mood you arrive with.
+            {dict.home.wanderByThemeSub}
           </p>
         </div>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
@@ -61,7 +68,7 @@ export default function Home() {
                 variant="outline"
                 className="hover:bg-accent/10 cursor-pointer px-3 py-1 text-sm"
               >
-                {THEME_LABELS[theme]}
+                {themeLabels[theme]}
               </Badge>
             </Link>
           ))}
@@ -80,9 +87,12 @@ export default function Home() {
                 {rumi.nameOriginal}
               </p>
               <h2 className="font-display mt-3 text-4xl font-semibold sm:text-5xl">
-                {rumi.name}
+                {isFa ? rumi.nameOriginal : rumi.name}
               </h2>
-              <p className="text-secondary mt-2 text-sm tracking-[0.3em] uppercase">
+              <p
+                className="text-secondary mt-2 text-sm tracking-[0.3em] uppercase"
+                dir="ltr"
+              >
                 {rumi.years} · {rumi.era}
               </p>
               <OrnamentalDivider className="my-8" />
@@ -91,13 +101,38 @@ export default function Home() {
               </p>
               <div className="mt-8">
                 <Button asChild size="lg">
-                  <Link href="/poets/rumi">Read his full story</Link>
+                  <Link href="/poets/rumi">{dict.home.readFullStory}</Link>
                 </Button>
               </div>
             </div>
           </div>
         </section>
       )}
+
+      <section className="animate-fade-up mt-20" style={{ animationDelay: "450ms" }}>
+        <div className="text-center">
+          <h2 className="font-display text-3xl">{dict.home.exploreSections}</h2>
+          <p className="text-muted-foreground mt-2 text-sm">
+            {dict.home.exploreSectionsSub}
+          </p>
+        </div>
+        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {journeyCards.map((card) => (
+            <Link
+              key={card.href}
+              href={card.href}
+              className="group border-border/70 bg-card rounded-lg border p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+            >
+              <h3 className="font-display group-hover:text-primary text-2xl">
+                {card.title}
+              </h3>
+              <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
+                {card.description}
+              </p>
+            </Link>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

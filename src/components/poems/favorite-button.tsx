@@ -4,6 +4,7 @@ import { Heart } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { useFavorites } from "@/hooks/use-favorites";
+import { useLanguage } from "@/components/site/language-provider";
 import { cn } from "@/lib/utils";
 
 export function FavoriteButton({
@@ -18,6 +19,7 @@ export function FavoriteButton({
   showLabel?: boolean;
 }) {
   const { isFavorite, toggleFavorite, hydrated } = useFavorites();
+  const { dict } = useLanguage();
   const active = hydrated && isFavorite(slug);
 
   return (
@@ -26,7 +28,7 @@ export function FavoriteButton({
       variant="outline"
       size={size}
       aria-pressed={active}
-      aria-label={active ? "Remove from favorites" : "Save to favorites"}
+      aria-label={active ? "Remove from favorites" : dict.common.save}
       className={cn(
         "border-border/70 gap-2",
         active && "border-secondary/60 bg-secondary/10 text-secondary",
@@ -39,7 +41,7 @@ export function FavoriteButton({
       }}
     >
       <Heart className={cn("size-4", active && "fill-current")} />
-      {showLabel && (active ? "Saved" : "Save")}
+      {showLabel && (active ? dict.common.saved : dict.common.save)}
     </Button>
   );
 }

@@ -4,10 +4,12 @@ import Link from "next/link";
 import { Heart } from "lucide-react";
 
 import { useFavorites } from "@/hooks/use-favorites";
+import { useLanguage } from "@/components/site/language-provider";
 import { cn } from "@/lib/utils";
 
 export function FavoritesNavLink({ className }: { className?: string }) {
   const { favorites, hydrated } = useFavorites();
+  const { dict } = useLanguage();
 
   return (
     <Link
@@ -18,7 +20,7 @@ export function FavoritesNavLink({ className }: { className?: string }) {
       )}
     >
       <Heart className="size-4" />
-      Favorites
+      {dict.nav.favorites}
       {hydrated && favorites.length > 0 && (
         <span className="bg-secondary text-secondary-foreground inline-flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-semibold">
           {favorites.length}

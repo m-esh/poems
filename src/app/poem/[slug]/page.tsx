@@ -10,13 +10,9 @@ import { SharePoemDialog } from "@/components/poems/share-poem-dialog";
 import { RandomPoemButton } from "@/components/poems/random-poem-button";
 import { PoemLinesReveal } from "@/components/poems/poem-lines-reveal";
 import { PoemCard } from "@/components/poems/poem-card";
-import {
-  THEME_LABELS,
-  getAllPoems,
-  getPoemBySlug,
-  getPoemsByPoet,
-  getPoetBySlug,
-} from "@/lib/poems";
+import { getDictionary, getThemeLabels } from "@/lib/i18n/dictionary";
+import { getLocale } from "@/lib/i18n/locale";
+import { getAllPoems, getPoemBySlug, getPoemsByPoet, getPoetBySlug } from "@/lib/poems";
 
 export function generateStaticParams() {
   return getAllPoems().map((poem) => ({ slug: poem.slug }));
@@ -46,10 +42,27 @@ export default async function PoemPage({
   const poem = getPoemBySlug(slug);
   if (!poem) notFound();
 
+  const locale = await getLocale();
+  const dict = getDictionary(locale);
+  const themeLabels = getThemeLabels(locale);
+  const isFa = locale === "fa";
+  const hasOriginal = Boolean(poem.originalText);
+
   const poet = getPoetBySlug(poem.poetSlug);
   const related = getPoemsByPoet(poem.poetSlug)
     .filter((p) => p.slug !== poem.slug)
     .slice(0, 3);
+
+  const primaryTitle = isFa && poem.titleOriginal ? poem.titleOriginal : poem.title;
+  const secondaryTitle = isFa && poem.titleOriginal ? poem.title : poem.titleOriginal;
+  const poetName = isFa ? (poet?.nameOriginal ?? poet?.name) : poet?.name;
+  const note = isFa ? poem.noteFa : poem.note;
+  const translator = isFa ? poem.translatorFa : poem.translator;
+
+  const mainLines = isFa && hasOriginal ? poem.originalText! : poem.translation;
+  const mainDir = isFa && hasOriginal ? "rtl" : "ltr";
+  const secondaryLines = isFa ? poem.translation : poem.originalText;
+  const secondaryLabel = isFa ? dict.poem.englishTranslation : dict.poem.originalPersian;
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
@@ -59,18 +72,32 @@ export default async function PoemPage({
             href={`/poets/${poet.slug}`}
             className="text-secondary text-xs tracking-[0.3em] uppercase hover:underline"
           >
-            {poet.name}
+            {poetName}
           </Link>
         )}
-        <h1 className="font-display mt-3 text-4xl font-semibold text-balance sm:text-5xl">
-          {poem.title}
+        <h1
+          className={
+            isFa && poem.titleOriginal
+              ? "font-nastaliq mt-3 text-4xl text-balance sm:text-5xl"
+              : "font-display mt-3 text-4xl font-semibold text-balance sm:text-5xl"
+          }
+          dir={isFa && poem.titleOriginal ? "rtl" : undefined}
+        >
+          {primaryTitle}
         </h1>
-        {poem.titleOriginal && (
-          <p className="font-nastaliq text-gold mt-2 text-2xl" dir="rtl">
-            {poem.titleOriginal}
+        {secondaryTitle && (
+          <p
+            className={
+              isFa
+                ? "text-muted-foreground mt-2 text-lg"
+                : "font-nastaliq text-gold mt-2 text-2xl"
+            }
+            dir={isFa ? undefined : "rtl"}
+          >
+            {secondaryTitle}
           </p>
         )}
-        <p className="text-muted-foreground mt-3 text-sm">
+        <p className="text-muted-foreground mt-3 text-sm" dir="ltr">
           {poem.collection} · {poem.century}
         </p>
         <div className="mt-4 flex flex-wrap justify-center gap-1.5">
@@ -80,7 +107,7 @@ export default async function PoemPage({
               href={`/library?theme=${theme}`}
               className="-my-2 inline-flex items-center py-2"
             >
-              <Badge variant="outline">{THEME_LABELS[theme]}</Badge>
+              <Badge variant="outline">{themeLabels[theme]}</Badge>
             </Link>
           ))}
         </div>
@@ -92,16 +119,20 @@ export default async function PoemPage({
 
       <OrnamentalDivider className="my-12" />
 
-      {poem.originalText && (
+      {secondaryLines && (
         <section className="border-gold/30 bg-card/60 mb-12 rounded-lg border p-6 sm:p-8">
           <p className="text-secondary mb-4 text-center text-xs tracking-[0.3em] uppercase">
-            Original Persian
+            {secondaryLabel}
           </p>
           <div
-            dir="rtl"
-            className="font-nastaliq flex flex-col gap-2 text-center text-2xl leading-loose sm:text-3xl"
+            dir={isFa ? "ltr" : "rtl"}
+            className={
+              isFa
+                ? "flex flex-col gap-2 text-center text-lg leading-relaxed italic sm:text-xl"
+                : "font-nastaliq flex flex-col gap-2 text-center text-2xl leading-loose sm:text-3xl"
+            }
           >
-            {poem.originalText.map((line, i) =>
+            {secondaryLines.map((line, i) =>
               line === "" ? (
                 <div key={i} className="h-3" aria-hidden />
               ) : (
@@ -112,41 +143,52 @@ export default async function PoemPage({
         </section>
       )}
 
-      <section className="font-display text-foreground text-2xl sm:text-3xl">
-        <PoemLinesReveal lines={poem.translation} className="gap-3 sm:gap-4" />
+      <section
+        className={
+          isFa && hasOriginal
+            ? "font-nastaliq text-foreground text-2xl sm:text-3xl"
+            : "font-display text-foreground text-2xl sm:text-3xl"
+        }
+      >
+        <PoemLinesReveal
+          lines={mainLines}
+          dir={mainDir}
+          className="gap-3 sm:gap-4"
+          lineClassName={isFa && hasOriginal ? "leading-loose" : undefined}
+        />
       </section>
 
-      <p className="text-muted-foreground mt-8 text-right text-sm italic">
-        — {poem.translator}
-      </p>
+      <p className="text-muted-foreground mt-8 text-end text-sm italic">— {translator}</p>
 
       <Separator className="my-12" />
 
       <section>
-        <h2 className="font-display text-2xl">Reflection &amp; context</h2>
-        <p className="text-foreground/90 mt-4 leading-relaxed text-pretty">{poem.note}</p>
+        <h2 className="font-display text-2xl">{dict.poem.reflectionContext}</h2>
+        <p className="text-foreground/90 mt-4 leading-relaxed text-pretty">{note}</p>
       </section>
 
       <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
         <RandomPoemButton variant="outline" currentSlug={poem.slug}>
-          Read another poem
+          {dict.poem.readAnother}
         </RandomPoemButton>
         {poet && (
           <Link
             href={`/poets/${poet.slug}`}
             className="text-secondary text-sm hover:underline"
           >
-            More from {poet.name} →
+            {dict.poem.moreFrom} {poetName} →
           </Link>
         )}
       </div>
 
       {related.length > 0 && (
         <section className="mt-20">
-          <h2 className="font-display text-center text-2xl">More from {poet?.name}</h2>
+          <h2 className="font-display text-center text-2xl">
+            {dict.poem.moreFrom} {poetName}
+          </h2>
           <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {related.map((p) => (
-              <PoemCard key={p.slug} poem={p} poet={poet} />
+              <PoemCard key={p.slug} poem={p} poet={poet} locale={locale} />
             ))}
           </div>
         </section>

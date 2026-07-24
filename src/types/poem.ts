@@ -15,6 +15,8 @@ export interface Poet {
   years: string;
   era: string;
   bio: string;
+  /** Farsi translation of `bio`, same "\n\n" paragraph convention. */
+  bioFa: string;
 }
 
 export interface Poem {
@@ -28,7 +30,11 @@ export interface Poem {
   /** Lines of the English text. A blank string marks a stanza break. */
   translation: string[];
   translator: string;
+  /** Farsi translation of `translator`. */
+  translatorFa: string;
   /** Original-language lines, when we have high confidence in the text. */
   originalText?: string[];
   note: string;
+  /** Farsi translation of `note`. */
+  noteFa: string;
 }

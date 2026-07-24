@@ -12,6 +12,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { useLanguage } from "@/components/site/language-provider";
 import type { Poem, Poet } from "@/types/poem";
 
 export function SharePoemDialog({ poem, poet }: { poem: Poem; poet: Poet | undefined }) {
@@ -19,8 +20,14 @@ export function SharePoemDialog({ poem, poet }: { poem: Poem; poet: Poet | undef
   const [copied, setCopied] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
+  const { locale, dict } = useLanguage();
+  const isFa = locale === "fa";
 
-  const excerpt = poem.translation.filter(Boolean).slice(0, 4);
+  const excerpt = (isFa && poem.originalText ? poem.originalText : poem.translation)
+    .filter(Boolean)
+    .slice(0, 4);
+  const title = isFa && poem.titleOriginal ? poem.titleOriginal : poem.title;
+  const poetName = isFa ? (poet?.nameOriginal ?? poet?.name) : poet?.name;
   const url =
     typeof window !== "undefined" ? `${window.location.origin}/poem/${poem.slug}` : "";
 
@@ -51,14 +58,12 @@ export function SharePoemDialog({ poem, poet }: { poem: Poem; poet: Poet | undef
     <Dialog open={open} onOpenChange={setOpen}>
       <Button variant="outline" className="gap-2" onClick={() => setOpen(true)}>
         <Share2 className="size-4" />
-        Share
+        {dict.common.share}
       </Button>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Share this poem</DialogTitle>
-          <DialogDescription>
-            Save a card for social sharing, or copy the link.
-          </DialogDescription>
+          <DialogTitle>{dict.poem.shareTitle}</DialogTitle>
+          <DialogDescription>{dict.poem.shareDescription}</DialogDescription>
         </DialogHeader>
 
         <div
@@ -69,7 +74,14 @@ export function SharePoemDialog({ poem, poet }: { poem: Poem; poet: Poet | undef
             Golshan Raz
           </div>
           <div className="bg-parchment/90 flex flex-1 flex-col justify-center gap-4 px-2 py-4 text-center">
-            <p className="font-display text-lg leading-relaxed italic">
+            <p
+              className={
+                isFa && poem.originalText
+                  ? "font-nastaliq text-xl leading-loose"
+                  : "font-display text-lg leading-relaxed italic"
+              }
+              dir={isFa && poem.originalText ? "rtl" : undefined}
+            >
               {excerpt.map((line, i) => (
                 <span key={i} className="block">
                   {line}
@@ -78,8 +90,17 @@ export function SharePoemDialog({ poem, poet }: { poem: Poem; poet: Poet | undef
             </p>
           </div>
           <div className="bg-parchment/90 p-2 text-center text-sm">
-            <p className="font-display text-base font-semibold">{poem.title}</p>
-            <p className="text-ink/60 text-xs">{poet?.name}</p>
+            <p
+              className={
+                isFa && poem.titleOriginal
+                  ? "font-nastaliq text-lg"
+                  : "font-display text-base font-semibold"
+              }
+              dir={isFa && poem.titleOriginal ? "rtl" : undefined}
+            >
+              {title}
+            </p>
+            <p className="text-ink/60 text-xs">{poetName}</p>
           </div>
         </div>
 
@@ -91,11 +112,11 @@ export function SharePoemDialog({ poem, poet }: { poem: Poem; poet: Poet | undef
             disabled={downloading}
           >
             <Download className="size-4" />
-            {downloading ? "Preparing…" : "Download image"}
+            {downloading ? "…" : dict.common.downloadImage}
           </Button>
           <Button variant="outline" className="flex-1 gap-2" onClick={handleCopyLink}>
             {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
-            {copied ? "Copied" : "Copy link"}
+            {copied ? dict.common.copied : dict.common.copyLink}
           </Button>
         </div>
       </DialogContent>

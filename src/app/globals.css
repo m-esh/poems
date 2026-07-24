@@ -164,6 +164,13 @@
     font-family: var(--font-body);
   }
 
+  /* Farsi UI: swap the Latin display/body fonts for a Persian-native one.
+     font-nastaliq stays reserved for calligraphic moments (poem titles, epigraphs). */
+  [dir="rtl"] {
+    --font-body: var(--font-vazirmatn), "Vazirmatn", sans-serif;
+    --font-display: var(--font-vazirmatn), "Vazirmatn", sans-serif;
+  }
+
   ::selection {
     background-color: hsl(var(--gold) / 0.35);
     color: hsl(var(--ink));

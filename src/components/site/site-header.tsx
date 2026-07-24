@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, Search } from "lucide-react";
+import { ChevronDown, Menu, Search } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -13,20 +13,38 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/components/site/theme-toggle";
+import { LanguageToggle } from "@/components/site/language-toggle";
 import { FavoritesNavLink } from "@/components/site/favorites-nav-link";
 import { RandomPoemButton } from "@/components/poems/random-poem-button";
+import { useLanguage } from "@/components/site/language-provider";
 import { cn } from "@/lib/utils";
-
-const NAV_LINKS = [
-  { href: "/library", label: "Library" },
-  { href: "/poets/rumi", label: "Rumi" },
-  { href: "/search", label: "Search" },
-];
 
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const { dict } = useLanguage();
+
+  const primaryLinks = [
+    { href: "/library", label: dict.nav.library },
+    { href: "/poets/rumi", label: dict.nav.rumi },
+  ];
+
+  const exploreLinks = [
+    { href: "/ideas", label: dict.nav.ideas },
+    { href: "/stories", label: dict.nav.stories },
+    { href: "/for-life", label: dict.nav.forLife },
+    { href: "/ask", label: dict.nav.ask },
+    { href: "/resources", label: dict.nav.resources },
+  ];
+
+  const allLinks = [...primaryLinks, ...exploreLinks];
 
   return (
     <header className="border-border/70 bg-background/85 sticky top-0 z-40 border-b backdrop-blur-md">
@@ -49,7 +67,7 @@ export function SiteHeader() {
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex">
-          {NAV_LINKS.map((link) => (
+          {primaryLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -61,33 +79,57 @@ export function SiteHeader() {
               {link.label}
             </Link>
           ))}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                type="button"
+                className={cn(
+                  "text-foreground/80 hover:text-foreground -my-2 inline-flex items-center gap-1 py-2 text-sm font-medium transition-colors",
+                  exploreLinks.some((l) => pathname.startsWith(l.href)) &&
+                    "text-foreground",
+                )}
+              >
+                {dict.nav.explore}
+                <ChevronDown className="size-3.5" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              {exploreLinks.map((link) => (
+                <DropdownMenuItem key={link.href} asChild>
+                  <Link href={link.href}>{link.label}</Link>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
           <FavoritesNavLink />
         </nav>
 
         <div className="hidden items-center gap-1 md:flex">
           <RandomPoemButton variant="ghost" className="text-sm">
-            Poem of chance
+            {dict.nav.poemOfChance}
           </RandomPoemButton>
+          <LanguageToggle />
           <ThemeToggle />
         </div>
 
         <div className="flex items-center gap-1 md:hidden">
-          <Link href="/search" aria-label="Search" className="p-2">
+          <Link href="/search" aria-label={dict.nav.search} className="p-2">
             <Search className="size-5" />
           </Link>
+          <LanguageToggle />
           <ThemeToggle />
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" aria-label="Open menu">
+              <Button variant="ghost" size="icon" aria-label={dict.nav.openMenu}>
                 <Menu className="size-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-4/5">
+            <SheetContent side="right" className="w-4/5 overflow-y-auto">
               <SheetHeader>
                 <SheetTitle>Golshan Raz</SheetTitle>
               </SheetHeader>
               <nav className="mt-6 flex flex-col gap-4">
-                {NAV_LINKS.map((link) => (
+                {allLinks.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
@@ -102,11 +144,11 @@ export function SiteHeader() {
                   onClick={() => setOpen(false)}
                   className="font-display text-xl"
                 >
-                  Favorites
+                  {dict.nav.favorites}
                 </Link>
                 <div onClick={() => setOpen(false)}>
                   <RandomPoemButton variant="secondary" className="w-full justify-center">
-                    Poem of chance
+                    {dict.nav.poemOfChance}
                   </RandomPoemButton>
                 </div>
               </nav>
