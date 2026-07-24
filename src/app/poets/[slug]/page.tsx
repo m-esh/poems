@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 
 import { OrnamentalDivider } from "@/components/site/ornamental-divider";
 import { PoemCard } from "@/components/poems/poem-card";
-import { getAllPoets, getPoemsByPoet, getPoetBySlug } from "@/lib/poems";
+import { getAllPoets, getPoemBySlug, getPoemsByPoet, getPoetBySlug } from "@/lib/poems";
 
 export function generateStaticParams() {
   return getAllPoets().map((poet) => ({ slug: poet.slug }));
@@ -18,7 +18,8 @@ export async function generateMetadata({
   const { slug } = await params;
   const poet = getPoetBySlug(slug);
   if (!poet) return {};
-  return { title: poet.name, description: poet.bio };
+  const [firstParagraph] = poet.bio.split("\n\n");
+  return { title: poet.name, description: firstParagraph };
 }
 
 export default async function PoetPage({
@@ -31,6 +32,8 @@ export default async function PoetPage({
   if (!poet) notFound();
 
   const poems = getPoemsByPoet(poet.slug);
+  const epigraph = getPoemBySlug("song-of-the-reed")?.translation.find(Boolean);
+  const bioParagraphs = poet.bio.split("\n\n");
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
@@ -42,10 +45,17 @@ export default async function PoetPage({
         <p className="text-secondary mt-2 text-sm tracking-[0.3em] uppercase">
           {poet.years} · {poet.era}
         </p>
+        {epigraph && (
+          <p className="font-display text-foreground/70 mt-6 text-xl italic">
+            &ldquo;{epigraph}&rdquo;
+          </p>
+        )}
         <OrnamentalDivider className="my-8" />
-        <p className="text-foreground/90 text-left leading-relaxed text-pretty sm:text-lg">
-          {poet.bio}
-        </p>
+        <div className="text-foreground/90 flex flex-col gap-5 text-left leading-relaxed text-pretty sm:text-lg">
+          {bioParagraphs.map((paragraph, i) => (
+            <p key={i}>{paragraph}</p>
+          ))}
+        </div>
       </div>
 
       <div className="mt-16">
@@ -60,8 +70,8 @@ export default async function PoetPage({
       </div>
 
       <div className="mt-12 text-center">
-        <Link href="/poets" className="text-secondary text-sm hover:underline">
-          ← Back to all poets
+        <Link href="/library" className="text-secondary text-sm hover:underline">
+          ← Browse the poems
         </Link>
       </div>
     </div>

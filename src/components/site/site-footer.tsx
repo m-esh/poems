@@ -26,10 +26,10 @@ export function SiteFooter() {
                 Library
               </Link>
               <Link
-                href="/poets"
+                href="/poets/rumi"
                 className="hover:text-foreground -my-2 inline-flex items-center py-2"
               >
-                Poets
+                Rumi
               </Link>
               <Link
                 href="/search"

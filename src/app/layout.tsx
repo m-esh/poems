@@ -30,19 +30,18 @@ const nastaliq = Noto_Nastaliq_Urdu({
 
 export const metadata: Metadata = {
   title: {
-    default: "Golshan Raz — A Persian Poetry Showcase",
+    default: "Golshan Raz — The Poetry of Rumi",
     template: "%s · Golshan Raz",
   },
   description:
-    "A quiet garden of Persian and Sufi poetry — Rumi, Hafez, Sa'di, Attar, Khayyam, and Shabistari — for slow reading, reflection, and return.",
+    "A quiet garden devoted to the poetry of Jalal ad-Din Rumi — his life, his message, and his verse, for slow reading, reflection, and return.",
   keywords: [
     "Persian poetry",
     "Sufi poetry",
     "Rumi",
-    "Hafez",
-    "Omar Khayyam",
-    "Sa'di",
-    "Attar",
+    "Jalal ad-Din Rumi",
+    "Masnavi",
+    "Divan-e Shams",
     "Golshan Raz",
   ],
 };

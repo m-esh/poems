@@ -2,26 +2,25 @@
 
 _A rose garden of secrets._
 
-A small, unhurried showcase of classical Persian and Sufi poetry — Rumi,
-Hafez, Sa'di, Attar, Omar Khayyam, and Mahmud Shabistari — built to feel like
-an illuminated manuscript reimagined for the web: warm parchment tones,
+A small, unhurried showcase devoted entirely to the poetry of **Jalal ad-Din
+Rumi** — his life, his message, and his verse — built to feel like an
+illuminated manuscript reimagined for the web: warm parchment tones,
 candlelit dark mode, geometric borders, and slow, meditative motion rather
 than anything flashy.
 
 ## Features
 
 - **Home** — a rotating "poem of the day," a short introduction to the
-  collection, and quick paths into the library by theme or by poet.
-- **Library** (`/library`) — the full collection, filterable by poet,
-  collection, and theme, with filters synced to the URL so a filtered view
+  collection, and a dedicated section introducing Rumi himself.
+- **Library** (`/library`) — every poem in the collection, filterable by
+  collection and theme, with filters synced to the URL so a filtered view
   is shareable.
-- **Poem pages** (`/poem/[slug]`) — large, readable typography; the original
-  Persian text (in Noto Nastaliq Urdu) where we have high confidence in the
-  source; translator credit; theme tags; and a reflection/historical-context
-  note.
-- **Poets** (`/poets`, `/poets/[slug]`) — short biographies and each poet's
-  poems.
-- **Search** (`/search`) — search across titles, poets, lines, and themes.
+- **Poem pages** (`/poem/[slug]`) — large, readable typography; the Persian
+  text (in Noto Nastaliq Urdu) alongside the English; translator credit;
+  theme tags; and a reflection/historical-context note.
+- **Rumi** (`/poets/rumi`) — a full biography: his life, his meeting with
+  Shams-e Tabrizi, the Masnavi, and his message, alongside his poems.
+- **Search** (`/search`) — search across titles, lines, and themes.
 - **Poem of the day / randomizer** — a deterministic "poem of the day" (same
   for everyone, changes at UTC midnight) plus a "poem of chance" button that
   jumps to a random poem.
@@ -69,12 +68,12 @@ Open [http://localhost:3000](http://localhost:3000).
 Other scripts:
 
 ```bash
-bun run build        # production build
-bun run start         # serve the production build
-bun run lint          # ESLint
-bun run typecheck     # tsc --noEmit
-bun run format         # Prettier, writes changes (Tailwind class sorting included)
-bun run format:check  # Prettier, check only
+bun run build          # production build
+bun run start           # serve the production build
+bun run lint             # ESLint
+bun run typecheck        # tsc --noEmit
+bun run format            # Prettier, writes changes (Tailwind class sorting included)
+bun run format:check     # Prettier, check only
 ```
 
 ## Folder structure
@@ -85,8 +84,8 @@ src/
     page.tsx                # Home
     library/page.tsx        # Library / browse
     poem/[slug]/page.tsx     # Individual poem
-    poets/page.tsx           # Poet index
-    poets/[slug]/page.tsx    # Poet bio + their poems
+    poets/page.tsx           # Redirects to /poets/rumi
+    poets/[slug]/page.tsx    # Rumi's biography + his poems
     search/page.tsx          # Search
     favorites/page.tsx       # Saved poems (client-only, localStorage)
     layout.tsx                # Root layout: fonts, theme provider, header/footer
@@ -99,8 +98,8 @@ src/
                  # favorite-button, share-poem-dialog, featured-poem, …
 
   data/
-    poets.json   # poet records
-    poems.json   # poem records
+    poets.json   # a single entry: Rumi
+    poems.json   # Rumi's poems
 
   lib/
     poems.ts     # data-access helpers (filtering, search, poem of the day, …)
@@ -118,7 +117,9 @@ src/
 
 Poems and poets are plain JSON (`src/data/poems.json`,
 `src/data/poets.json`), typed via `src/types/poem.ts`. There's no CMS or
-database — adding a poem is a pull request, not a migration.
+database — adding a poem is a pull request, not a migration. The data model
+supports multiple poets even though the collection is currently Rumi-only,
+so a future expansion doesn't require restructuring anything.
 
 ```ts
 interface Poem {
@@ -126,7 +127,7 @@ interface Poem {
   title: string;
   titleOriginal?: string; // Persian title, if known
   poetSlug: string; // must match a Poet.slug
-  collection: string; // e.g. "Divan-e Hafez"
+  collection: string; // e.g. "Divan-e Shams-e Tabrizi"
   century: string;
   themes: Theme[]; // "love" | "longing" | "the-divine" | "nature" |
   // "wine-and-ecstasy" | "impermanence" | "unity" | "wisdom"
@@ -139,35 +140,34 @@ interface Poem {
 
 ### Adding a poem
 
-1. If it's a new poet, add an entry to `src/data/poets.json` first
-   (`slug`, `name`, `nameOriginal`, `years`, `era`, `bio`).
-2. Add a poem object to `src/data/poems.json`. `slug` must be unique and
-   URL-safe (kebab-case). `poetSlug` must match an existing poet.
-3. Split `translation` (and `originalText`, if you have it) into one array
+1. Add a poem object to `src/data/poems.json`. `slug` must be unique and
+   URL-safe (kebab-case). `poetSlug` should be `"rumi"` unless the
+   collection is expanded to other poets (see `src/data/poets.json`).
+2. Split `translation` (and `originalText`, if you have it) into one array
    entry per line; insert an empty string `""` where you want a stanza
    break/blank line.
-4. Pick 1–4 `themes` from the existing set (see `THEME_LABELS` in
+3. Pick 1–4 `themes` from the existing set (see `THEME_LABELS` in
    `src/lib/poems.ts` if you're adding a new theme — you'll also need to add
    a label there).
-5. Run `bun run typecheck` — the JSON is typed, so a missing field or typo
-   in `poetSlug` will surface immediately. Static params for the poem/poet
-   pages are generated automatically at build time, so no route wiring is
-   needed.
+4. Run `bun run typecheck` — the JSON is typed, so a missing field or typo
+   will surface immediately. Static params for the poem/poet pages are
+   generated automatically at build time, so no route wiring is needed.
 
 ### A note on translations
 
-Where a poem quotes a historical public-domain translation verbatim
-(currently: Edward FitzGerald's _Rubáiyát of Omar Khayyám_), the
-`translator` field names the actual translator and edition. Everywhere else,
-`translator` reads "Rendered for Golshan Raz, after the Persian" — these are
-new English renderings written for this collection, in the spirit and
-imagery of the original, rather than word-for-word quotations of a specific
-named 19th/20th-century scholar's translation. This distinction matters:
-please preserve it (don't relabel an adapted rendering as if it were someone
-else's exact, citable translation) when adding poems.
-
-`originalText` (the Persian) is included only where there's high confidence
-in the source text; it's fine to omit it (it's optional) rather than guess.
+Where a poem quotes Rumi's own Persian verbatim (currently: "The Song of the
+Reed," the opening of the Masnavi — a very famous, well-attested text), the
+`translator` field reads "Rendered for Golshan Raz, after the Persian," and
+the `note` says so explicitly. For the other poems in the collection, the
+English text is an original composition written for this collection in
+Rumi's spirit and imagery — not a translation of one specific historical
+verse — and the `translator` field says so plainly ("English original for
+Golshan Raz, with a Persian rendering by the editors"). In those cases the
+Persian text is the editors' own rendering of the English, offered
+alongside it, not a quotation from Rumi's manuscript. This distinction is
+spelled out in each poem's `note` field. Please preserve it — don't relabel
+an original composition or an editors' rendering as if it were a direct
+quotation of Rumi's actual text — when adding poems.
 
 ## Design system
 
@@ -203,6 +203,14 @@ the tree — could trip a Turbopack/Next 16 bug
 `next build`'s page-data collection). `button.tsx` is marked `"use client"`
 to sidestep it; keep that in mind if you add new Radix-backed primitives
 that might be rendered from a plain server component.
+
+## Deploying to Vercel
+
+`vercel.json` pins `"framework": "nextjs"` so Vercel uses the Next.js
+builder even if the dashboard's Framework Preset was ever set to something
+else (a mismatch there causes a build to fail looking for a `public/`
+output directory). `package.json` also pins `engines.node` to `>=20.9.0`,
+which Next.js 16 requires.
 
 ## Linting & formatting
 

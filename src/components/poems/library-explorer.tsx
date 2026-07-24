@@ -28,7 +28,6 @@ import { cn } from "@/lib/utils";
 const ALL = "all";
 
 export interface LibraryInitialFilters {
-  poet?: string;
   collection?: string;
   theme?: string;
   q?: string;
@@ -43,7 +42,6 @@ export function LibraryExplorer({ initial }: { initial?: LibraryInitialFilters }
   const pathname = usePathname();
 
   const [query, setQuery] = useState(initial?.q ?? "");
-  const [poetSlug, setPoetSlug] = useState<string>(initial?.poet ?? ALL);
   const [collection, setCollection] = useState<string>(initial?.collection ?? ALL);
   const [activeThemes, setActiveThemes] = useState<Theme[]>(
     initial?.theme && themes.includes(initial.theme as Theme)
@@ -59,13 +57,12 @@ export function LibraryExplorer({ initial }: { initial?: LibraryInitialFilters }
     }
     const params = new URLSearchParams();
     if (query.trim()) params.set("q", query.trim());
-    if (poetSlug !== ALL) params.set("poet", poetSlug);
     if (collection !== ALL) params.set("collection", collection);
     if (activeThemes.length === 1) params.set("theme", activeThemes[0]);
     const search = params.toString();
     router.replace(search ? `${pathname}?${search}` : pathname, { scroll: false });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, poetSlug, collection, activeThemes]);
+  }, [query, collection, activeThemes]);
 
   function toggleTheme(theme: Theme) {
     setActiveThemes((prev) =>
@@ -75,21 +72,15 @@ export function LibraryExplorer({ initial }: { initial?: LibraryInitialFilters }
 
   function clearFilters() {
     setQuery("");
-    setPoetSlug(ALL);
     setCollection(ALL);
     setActiveThemes([]);
   }
 
-  const hasFilters =
-    query.trim() !== "" ||
-    poetSlug !== ALL ||
-    collection !== ALL ||
-    activeThemes.length > 0;
+  const hasFilters = query.trim() !== "" || collection !== ALL || activeThemes.length > 0;
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
     return poems.filter((poem) => {
-      if (poetSlug !== ALL && poem.poetSlug !== poetSlug) return false;
       if (collection !== ALL && poem.collection !== collection) return false;
       if (activeThemes.length > 0 && !activeThemes.every((t) => poem.themes.includes(t)))
         return false;
@@ -99,7 +90,7 @@ export function LibraryExplorer({ initial }: { initial?: LibraryInitialFilters }
       }
       return true;
     });
-  }, [poems, poetSlug, collection, activeThemes, query]);
+  }, [poems, collection, activeThemes, query]);
 
   return (
     <div>
@@ -111,19 +102,6 @@ export function LibraryExplorer({ initial }: { initial?: LibraryInitialFilters }
             onChange={(e) => setQuery(e.target.value)}
             className="sm:max-w-xs"
           />
-          <Select value={poetSlug} onValueChange={setPoetSlug}>
-            <SelectTrigger className="sm:w-56">
-              <SelectValue placeholder="All poets" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value={ALL}>All poets</SelectItem>
-              {poets.map((poet) => (
-                <SelectItem key={poet.slug} value={poet.slug}>
-                  {poet.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
           <Select value={collection} onValueChange={setCollection}>
             <SelectTrigger className="sm:w-56">
               <SelectValue placeholder="All collections" />

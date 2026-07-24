@@ -1,12 +1,12 @@
 import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { OrnamentalDivider } from "@/components/site/ornamental-divider";
 import { FeaturedPoem } from "@/components/poems/featured-poem";
 import {
-  getAllPoets,
   getPoemOfDay,
-  getPoemsByPoet,
+  getPoetBySlug,
   THEME_LABELS,
   getAllThemes,
   withPoet,
@@ -14,8 +14,9 @@ import {
 
 export default function Home() {
   const { poem, poet } = withPoet(getPoemOfDay());
-  const poets = getAllPoets();
+  const rumi = getPoetBySlug("rumi");
   const themes = getAllThemes();
+  const [bioExcerpt] = rumi?.bio.split("\n\n") ?? [];
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
@@ -31,10 +32,10 @@ export default function Home() {
         </p>
         <OrnamentalDivider className="my-8" />
         <p className="text-muted-foreground leading-relaxed text-pretty sm:text-lg">
-          A small, unhurried collection of Persian and Sufi poetry — Rumi, Hafez,
-          Sa&apos;di, Attar, Khayyam, and Shabistari — gathered here the way an
-          illuminated manuscript gathers light: slowly, and to be returned to. Read a poem
-          of the day, wander the library by theme, or let chance choose for you.
+          A small, unhurried collection devoted entirely to Jalal ad-Din Rumi — gathered
+          here the way an illuminated manuscript gathers light: slowly, and to be returned
+          to. Read a poem of the day, wander the collection by theme, or let chance choose
+          for you.
         </p>
       </section>
 
@@ -67,34 +68,36 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="animate-fade-up mt-20" style={{ animationDelay: "350ms" }}>
-        <div className="text-center">
-          <h2 className="font-display text-3xl">The poets</h2>
-          <p className="text-muted-foreground mt-2 text-sm">
-            Six voices across seven centuries of Persian verse.
-          </p>
-        </div>
-        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {poets.map((p) => (
-            <Link
-              key={p.slug}
-              href={`/poets/${p.slug}`}
-              className="group border-border/70 bg-card rounded-lg border p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
-            >
-              <p className="font-nastaliq text-gold text-xl" dir="rtl">
-                {p.nameOriginal}
+      {rumi && (
+        <section className="animate-fade-up mt-20" style={{ animationDelay: "350ms" }}>
+          <div className="border-gold/30 bg-card/70 relative overflow-hidden rounded-xl border px-6 py-12 shadow-sm sm:px-12 sm:py-16">
+            <div
+              className="pattern-lattice pointer-events-none absolute inset-0 opacity-40"
+              aria-hidden
+            />
+            <div className="relative mx-auto max-w-2xl text-center">
+              <p className="font-nastaliq text-gold text-3xl" dir="rtl">
+                {rumi.nameOriginal}
               </p>
-              <h3 className="font-display group-hover:text-primary mt-1 text-2xl">
-                {p.name}
-              </h3>
-              <p className="text-muted-foreground mt-1 text-xs">{p.era}</p>
-              <p className="text-secondary mt-3 text-xs">
-                {getPoemsByPoet(p.slug).length} poems in the collection
+              <h2 className="font-display mt-3 text-4xl font-semibold sm:text-5xl">
+                {rumi.name}
+              </h2>
+              <p className="text-secondary mt-2 text-sm tracking-[0.3em] uppercase">
+                {rumi.years} · {rumi.era}
               </p>
-            </Link>
-          ))}
-        </div>
-      </section>
+              <OrnamentalDivider className="my-8" />
+              <p className="text-foreground/90 leading-relaxed text-pretty sm:text-lg">
+                {bioExcerpt}
+              </p>
+              <div className="mt-8">
+                <Button asChild size="lg">
+                  <Link href="/poets/rumi">Read his full story</Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   );
 }

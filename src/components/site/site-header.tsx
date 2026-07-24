@@ -20,7 +20,7 @@ import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
   { href: "/library", label: "Library" },
-  { href: "/poets", label: "Poets" },
+  { href: "/poets/rumi", label: "Rumi" },
   { href: "/search", label: "Search" },
 ];
 

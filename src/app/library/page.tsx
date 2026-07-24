@@ -4,14 +4,14 @@ import { LibraryExplorer } from "@/components/poems/library-explorer";
 
 export const metadata: Metadata = {
   title: "Library",
-  description: "Browse the full collection, filterable by poet, theme, and collection.",
+  description:
+    "Browse Rumi's poems in this collection, filterable by theme and collection.",
 };
 
 export default async function LibraryPage({
   searchParams,
 }: {
   searchParams: Promise<{
-    poet?: string;
     theme?: string;
     collection?: string;
     q?: string;
@@ -24,15 +24,14 @@ export default async function LibraryPage({
       <div className="mx-auto max-w-2xl text-center">
         <h1 className="font-display text-4xl font-semibold sm:text-5xl">The Library</h1>
         <p className="text-muted-foreground mt-3">
-          Every poem in Golshan Raz, gathered in one room. Filter by poet, by collection,
-          or by the theme that matches your mood.
+          Every Rumi poem in Golshan Raz, gathered in one room. Filter by collection, or
+          by the theme that matches your mood.
         </p>
       </div>
 
       <div className="mt-10">
         <LibraryExplorer
           initial={{
-            poet: params.poet,
             theme: params.theme,
             collection: params.collection,
             q: params.q,
