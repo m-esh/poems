@@ -12,29 +12,38 @@ export function SiteFooter() {
             <p className="font-display text-muted-foreground text-xl italic">
               &ldquo;Listen to the reed, how it tells its tale.&rdquo;
             </p>
-            <nav className="text-foreground/70 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm">
-              <Link href="/" className="hover:text-foreground">
+            <nav className="text-foreground/70 -my-2 flex flex-wrap justify-center gap-x-4 text-sm">
+              <Link
+                href="/"
+                className="hover:text-foreground -my-2 inline-flex items-center py-2"
+              >
                 Home
               </Link>
-              <Link href="/library" className="hover:text-foreground">
+              <Link
+                href="/library"
+                className="hover:text-foreground -my-2 inline-flex items-center py-2"
+              >
                 Library
               </Link>
-              <Link href="/poets" className="hover:text-foreground">
+              <Link
+                href="/poets"
+                className="hover:text-foreground -my-2 inline-flex items-center py-2"
+              >
                 Poets
               </Link>
-              <Link href="/search" className="hover:text-foreground">
+              <Link
+                href="/search"
+                className="hover:text-foreground -my-2 inline-flex items-center py-2"
+              >
                 Search
               </Link>
-              <Link href="/favorites" className="hover:text-foreground">
+              <Link
+                href="/favorites"
+                className="hover:text-foreground -my-2 inline-flex items-center py-2"
+              >
                 Favorites
               </Link>
             </nav>
-            <p className="text-muted-foreground max-w-md text-xs leading-relaxed">
-              Golshan Raz is a small showcase of classical Persian and Sufi poetry, built
-              for slow reading. Where a translation is not a direct quotation of a
-              historical text, it is marked as a new rendering prepared for this
-              collection. See the README for sources and how to contribute a poem.
-            </p>
             <p className="text-muted-foreground/70 text-xs">
               گلشن راز · a rose garden of secrets
             </p>

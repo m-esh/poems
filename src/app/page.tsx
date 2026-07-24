@@ -51,7 +51,11 @@ export default function Home() {
         </div>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           {themes.map((theme) => (
-            <Link key={theme} href={`/library?theme=${theme}`}>
+            <Link
+              key={theme}
+              href={`/library?theme=${theme}`}
+              className="-my-2 inline-flex items-center py-2"
+            >
               <Badge
                 variant="outline"
                 className="hover:bg-accent/10 cursor-pointer px-3 py-1 text-sm"

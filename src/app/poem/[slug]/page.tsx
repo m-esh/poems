@@ -75,7 +75,11 @@ export default async function PoemPage({
         </p>
         <div className="mt-4 flex flex-wrap justify-center gap-1.5">
           {poem.themes.map((theme) => (
-            <Link key={theme} href={`/library?theme=${theme}`}>
+            <Link
+              key={theme}
+              href={`/library?theme=${theme}`}
+              className="-my-2 inline-flex items-center py-2"
+            >
               <Badge variant="outline">{THEME_LABELS[theme]}</Badge>
             </Link>
           ))}

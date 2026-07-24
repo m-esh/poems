@@ -152,7 +152,12 @@ export function LibraryExplorer({ initial }: { initial?: LibraryInitialFilters }
           {themes.map((theme) => {
             const active = activeThemes.includes(theme);
             return (
-              <button key={theme} type="button" onClick={() => toggleTheme(theme)}>
+              <button
+                key={theme}
+                type="button"
+                onClick={() => toggleTheme(theme)}
+                className="-my-2 inline-flex items-center py-2"
+              >
                 <Badge
                   variant={active ? "accent" : "outline"}
                   className={cn("cursor-pointer select-none", active && "shadow-sm")}
