@@ -1,0 +1,217 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --radius: 0.5rem;
+
+  /* Daylight — aged parchment */
+  --background: 43 46% 92%;
+  --foreground: 258 32% 16%;
+
+  --card: 42 50% 96%;
+  --card-foreground: 258 32% 16%;
+
+  --popover: 42 50% 97%;
+  --popover-foreground: 258 32% 16%;
+
+  --primary: 226 42% 27%;
+  --primary-foreground: 42 50% 96%;
+
+  --secondary: 16 55% 40%;
+  --secondary-foreground: 42 50% 96%;
+
+  --accent: 41 68% 47%;
+  --accent-foreground: 258 40% 14%;
+
+  --muted: 40 34% 85%;
+  --muted-foreground: 255 15% 38%;
+
+  --destructive: 6 55% 42%;
+  --destructive-foreground: 42 50% 96%;
+
+  --border: 38 30% 76%;
+  --input: 38 30% 76%;
+  --ring: 41 68% 47%;
+
+  /* Named theme colors for decorative use */
+  --indigo: 226 42% 27%;
+  --sienna: 16 55% 40%;
+  --gold: 41 68% 47%;
+  --parchment: 43 46% 92%;
+  --ink: 258 32% 16%;
+}
+
+.dark {
+  /* Candlelight — deep indigo night */
+  --background: 256 38% 9%;
+  --foreground: 42 42% 88%;
+
+  --card: 256 34% 12%;
+  --card-foreground: 42 42% 88%;
+
+  --popover: 256 34% 11%;
+  --popover-foreground: 42 42% 88%;
+
+  --primary: 41 68% 58%;
+  --primary-foreground: 256 38% 10%;
+
+  --secondary: 16 50% 52%;
+  --secondary-foreground: 256 38% 9%;
+
+  --accent: 41 68% 58%;
+  --accent-foreground: 256 38% 10%;
+
+  --muted: 256 26% 18%;
+  --muted-foreground: 42 20% 68%;
+
+  --destructive: 6 60% 58%;
+  --destructive-foreground: 256 38% 9%;
+
+  --border: 256 22% 24%;
+  --input: 256 22% 24%;
+  --ring: 41 68% 58%;
+
+  --indigo: 226 50% 62%;
+  --sienna: 16 55% 58%;
+  --gold: 41 68% 58%;
+  --parchment: 42 42% 88%;
+  --ink: 42 42% 88%;
+}
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-indigo: hsl(var(--indigo));
+  --color-sienna: hsl(var(--sienna));
+  --color-gold: hsl(var(--gold));
+  --color-parchment: hsl(var(--parchment));
+  --color-ink: hsl(var(--ink));
+
+  --radius-sm: calc(var(--radius) - 0.25rem);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 0.25rem);
+  --radius-xl: calc(var(--radius) + 0.5rem);
+
+  --font-display: var(--font-cormorant), "Cormorant Garamond", serif;
+  --font-body: var(--font-lora), "Lora", serif;
+  --font-nastaliq: var(--font-nastaliq), "Noto Nastaliq Urdu", serif;
+
+  --animate-fade-up: fade-up 0.8s ease-out both;
+  --animate-flicker: flicker 6s ease-in-out infinite;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(0.75rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes flicker {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    45% {
+      opacity: 0.85;
+    }
+    50% {
+      opacity: 0.97;
+    }
+    55% {
+      opacity: 0.82;
+    }
+  }
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  html {
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: var(--font-body);
+  }
+
+  ::selection {
+    background-color: hsl(var(--gold) / 0.35);
+    color: hsl(var(--ink));
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+  .font-nastaliq {
+    font-family: var(--font-nastaliq);
+  }
+
+  /* Subtle interlocking lattice, evoking Persian geometric tilework. */
+  .pattern-lattice {
+    background-image:
+      repeating-linear-gradient(
+        45deg,
+        hsl(var(--gold) / 0.5) 0,
+        hsl(var(--gold) / 0.5) 1px,
+        transparent 1px,
+        transparent 14px
+      ),
+      repeating-linear-gradient(
+        -45deg,
+        hsl(var(--gold) / 0.5) 0,
+        hsl(var(--gold) / 0.5) 1px,
+        transparent 1px,
+        transparent 14px
+      );
+  }
+
+  /* Page-level vignette, like light falling on a manuscript page. */
+  .vignette::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background: radial-gradient(
+      ellipse at 50% 0%,
+      transparent 55%,
+      hsl(var(--ink) / 0.12) 100%
+    );
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}

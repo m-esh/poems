@@ -1,0 +1,50 @@
+[
+  {
+    "slug": "rumi",
+    "name": "Jalal ad-Din Rumi",
+    "nameOriginal": "جلال‌الدین محمد رومی",
+    "years": "1207–1273",
+    "era": "13th century, Konya",
+    "bio": "Born in Balkh and settled in Konya, Rumi was a jurist and theologian whose meeting with the wandering dervish Shams-e Tabrizi turned him into Persian's most beloved mystic poet. His Masnavi-ye Ma'navi, six books of spiritual couplets, is sometimes called 'the Quran in Persian,' while his Divan-e Shams pours out ecstatic, often unruly love for the divine, disguised as a friend."
+  },
+  {
+    "slug": "hafez",
+    "name": "Hafez",
+    "nameOriginal": "خواجه شمس‌الدین محمد حافظ شیرازی",
+    "years": "c. 1315–1390",
+    "era": "14th century, Shiraz",
+    "bio": "Khwaja Shams-ud-Din Muhammad Hafez-e Shirazi memorized the Qur'an as a young man — hence 'Hafez,' one who has memorized — before becoming Persian's supreme ghazal writer. His Divan sets tavern, wine, and the beloved's face against pious hypocrisy, using worldly pleasure as a mask and a mirror for divine love. Copies of his Divan are still used for fal-e Hafez, a form of bibliomancy consulted at Nowruz and weddings."
+  },
+  {
+    "slug": "khayyam",
+    "name": "Omar Khayyam",
+    "nameOriginal": "غیاث‌الدین ابوالفتح عمر بن ابراهیم خیام نیشابوری",
+    "years": "1048–1131",
+    "era": "11th–12th century, Nishapur",
+    "bio": "A mathematician and astronomer who reformed the Persian calendar and advanced algebra, Khayyam is known to English readers almost entirely through the ruba'i, a self-contained quatrain. His quatrains turn a skeptic's eye on paradise and predestination, urging the reader toward the wine-cup and the present moment — read by some as hedonism, by others as a Sufi cipher for divine intoxication."
+  },
+  {
+    "slug": "attar",
+    "name": "Farid ud-Din Attar",
+    "nameOriginal": "فریدالدین ابوحامد محمد عطار نیشابوری",
+    "years": "c. 1145–c. 1221",
+    "era": "12th–13th century, Nishapur",
+    "bio": "A pharmacist by trade (attar, 'perfumer,' names the shop where he treated the sick and heard their stories), Attar became one of the great architects of Sufi allegory. His masterwork, Mantiq al-Tayr — The Conference of the Birds — sends the world's birds on a journey across seven valleys in search of their king, the Simorgh, and is read as a map of the soul's road to God. Rumi is said to have called him 'the soul' where he himself was only 'the body.'"
+  },
+  {
+    "slug": "sadi",
+    "name": "Sa'di",
+    "nameOriginal": "ابومحمد مصلح‌الدین بن عبدالله شیرازی",
+    "years": "c. 1210–1291/94",
+    "era": "13th century, Shiraz",
+    "bio": "Muslih al-Din Sa'di of Shiraz spent decades traveling the medieval world before returning home to write the Bustan and the Golestan, verse-and-prose collections that mix worldly counsel, wit, and devotion. Prized for his plain-spoken clarity as much as his ethics, Sa'di gave Persian its most quoted lines on kindness across a shared humanity — his verse on the human family is inscribed at the entrance to the United Nations."
+  },
+  {
+    "slug": "shabistari",
+    "name": "Mahmud Shabistari",
+    "nameOriginal": "سعدالدین محمود بن امین‌الدین عبدالکریم شبستری",
+    "years": "c. 1288–1340",
+    "era": "14th century, Tabriz",
+    "bio": "A theologian of Tabriz, Shabistari wrote the Gulshan-i Raz — The Secret Rose Garden — in 1311 as a set of verse answers to seventeen questions on Sufi doctrine posed by a traveler from Herat. Compact and startlingly direct, it became one of the most widely copied handbooks of Persian mysticism, prized for compressing the whole of the Sufi path into a single, disciplined rose garden of couplets."
+  }
+]
