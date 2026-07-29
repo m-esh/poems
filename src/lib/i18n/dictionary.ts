@@ -43,6 +43,7 @@ const dictionary = {
       explore: "Explore",
       ideas: "Ideas",
       stories: "Stories",
+      thinkers: "Thinkers",
       forLife: "For Life",
       ask: "Ask Rumi",
       resources: "Resources",
@@ -77,6 +78,11 @@ const dictionary = {
       stories: {
         title: "Stories",
         description: "Parables from the Masnavi, and what they teach.",
+      },
+      thinkers: {
+        title: "Thinkers",
+        description:
+          "Philosophers, scholars, poets, and psychologists who have read Rumi — with sources.",
       },
       forLife: {
         title: "For Life",
@@ -270,6 +276,13 @@ const dictionary = {
       updated:
         "Updated July 2026. A selective guide, not a claim to catalogue every edition in print.",
     },
+    thinkers: {
+      title: "Rumi Through Other Thinkers",
+      subtitle:
+        "Rumi was never only a poet of the past. Here is how philosophers, historians of religion, poets, and psychologists have engaged with him — each entry grounded in a documented, citable source, not an invented quote.",
+      methodology:
+        "\"Direct influence\" and \"intellectual resemblance\" are not the same thing, and this page tries to keep them apart. Where a thinker's contact with Rumi was indirect — through a translation rather than the Persian original — that is stated plainly. Every entry is sourced to a specific published work.",
+    },
   },
   fa: {
     dir: "rtl",
@@ -289,6 +302,7 @@ const dictionary = {
       explore: "بیشتر",
       ideas: "اندیشه‌ها",
       stories: "حکایت‌ها",
+      thinkers: "دیدگاه متفکران",
       forLife: "برای زندگی",
       ask: "از مولانا بپرس",
       resources: "منابع",
@@ -323,6 +337,11 @@ const dictionary = {
       stories: {
         title: "حکایت‌ها",
         description: "حکایت‌هایی از مثنوی، و آنچه می‌آموزند.",
+      },
+      thinkers: {
+        title: "دیدگاه متفکران",
+        description:
+          "فیلسوفان، پژوهشگران، شاعران و روان‌شناسانی که مولانا را خوانده‌اند — همراه با منبع.",
       },
       forLife: {
         title: "برای زندگی",
@@ -509,6 +528,13 @@ const dictionary = {
       subtitle:
         "راهنمایی گزیده برای خوانندگانی که می‌خواهند فراتر بروند — آثار خود مولانا، ترجمه‌های مهم، زندگینامه‌ها و اقتباس‌های سینمایی.",
       updated: "به‌روزرسانی ژوئیه ۲۰۲۶. راهنمایی گزیده، نه ادعای ثبت هر چاپ موجود.",
+    },
+    thinkers: {
+      title: "مولانا از نگاه دیگر متفکران",
+      subtitle:
+        "مولانا هرگز تنها شاعری از گذشته نبوده است. این صفحه نشان می‌دهد فیلسوفان، تاریخ‌نگاران دین، شاعران و روان‌شناسان چگونه با او درگیر شده‌اند — هر مدخل بر پایه منبعی مستند و قابل استناد، نه نقل‌قولی ساختگی.",
+      methodology:
+        "«تأثیر مستقیم» و «شباهت فکری» یکی نیستند، و این صفحه می‌کوشد این دو را از هم جدا نگه دارد. جایی که تماس یک متفکر با مولانا غیرمستقیم بوده — از طریق ترجمه، نه متن اصلی فارسی — این نکته به‌صراحت بیان شده است. هر مدخل به یک اثر منتشرشده مشخص ارجاع دارد.",
     },
   },
 } satisfies Record<Locale, unknown>;

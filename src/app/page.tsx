@@ -23,6 +23,7 @@ export default async function Home() {
   const journeyCards = [
     { href: "/ideas", ...dict.sections.ideas },
     { href: "/stories", ...dict.sections.stories },
+    { href: "/thinkers", ...dict.sections.thinkers },
     { href: "/for-life", ...dict.sections.forLife },
     { href: "/ask", ...dict.sections.ask },
     { href: "/resources", ...dict.sections.resources },

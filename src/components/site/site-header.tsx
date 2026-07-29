@@ -39,6 +39,7 @@ export function SiteHeader() {
   const exploreLinks = [
     { href: "/ideas", label: dict.nav.ideas },
     { href: "/stories", label: dict.nav.stories },
+    { href: "/thinkers", label: dict.nav.thinkers },
     { href: "/for-life", label: dict.nav.forLife },
     { href: "/ask", label: dict.nav.ask },
     { href: "/resources", label: dict.nav.resources },

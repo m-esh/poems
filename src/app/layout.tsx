@@ -73,7 +73,7 @@ export default async function RootLayout({
       className={`${cormorant.variable} ${lora.variable} ${nastaliq.variable} ${vazirmatn.variable}`}
     >
       <body className="bg-background font-body text-foreground flex min-h-screen flex-col antialiased">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <LanguageProvider initialLocale={locale}>
             <div className="vignette flex min-h-screen flex-col">
               <SiteHeader />

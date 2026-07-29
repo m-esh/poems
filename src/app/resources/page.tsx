@@ -37,14 +37,20 @@ export default async function ResourcesPage() {
           <div className="flex flex-col gap-14">
             {bookSections.map((section) => (
               <div key={section.key}>
-                <h2 className="font-display text-2xl">{section.title}</h2>
+                <h2 className="font-display text-2xl">
+                  {isFa ? section.titleFa : section.title}
+                </h2>
                 <div className="border-border/70 divide-border/70 mt-4 flex flex-col divide-y border-y">
                   {section.books.map((book) => (
                     <div key={book.title} className="py-4">
-                      <p className="font-display text-lg">{book.title}</p>
-                      <p className="text-secondary text-sm">{book.author}</p>
+                      <p className="font-display text-lg">
+                        {isFa ? book.titleFa : book.title}
+                      </p>
+                      <p className="text-secondary text-sm">
+                        {isFa ? book.authorFa : book.author}
+                      </p>
                       <p className="text-muted-foreground mt-1 text-sm leading-relaxed">
-                        {book.note}
+                        {isFa ? book.noteFa : book.note}
                       </p>
                     </div>
                   ))}
@@ -61,14 +67,18 @@ export default async function ResourcesPage() {
                 key={film.title}
                 className="flex flex-col gap-1 py-4 sm:flex-row sm:gap-4"
               >
-                <span className="text-secondary shrink-0 text-sm font-semibold">
+                <span className="text-secondary shrink-0 text-sm font-semibold" dir="ltr">
                   {film.year}
                 </span>
                 <div>
-                  <p className="font-display text-lg">{film.title}</p>
-                  <p className="text-secondary text-sm">{film.director}</p>
+                  <p className="font-display text-lg">
+                    {isFa ? film.titleFa : film.title}
+                  </p>
+                  <p className="text-secondary text-sm">
+                    {isFa ? film.directorFa : film.director}
+                  </p>
                   <p className="text-muted-foreground mt-1 text-sm leading-relaxed">
-                    {film.note}
+                    {isFa ? film.noteFa : film.note}
                   </p>
                 </div>
               </div>
